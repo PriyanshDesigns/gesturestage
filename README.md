@@ -1,5 +1,8 @@
 # GestureStage
 
+**Live demo:** https://gesturestage.vercel.app
+**Repo:** https://github.com/PriyanshDesigns/gesturestage
+
 Control a presentation with hand gestures, read live through your laptop's
 webcam in the browser — next/previous slide, a laser pointer, pinch-to-zoom,
 and blanking the screen. No clicker, no install, no video ever leaves the
