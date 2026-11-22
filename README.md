@@ -78,3 +78,36 @@ Webcam → Hand Tracker (MediaPipe) → Classifier → Dispatcher → Slides / P
 
 Figma file (design system + all 6 screens):
 https://www.figma.com/design/GPcLrYXQdwyzxsI13RsrlB
+
+## Ishaara — two-hand recognition test
+
+A feasibility test for the next concept, an Indian Sign Language fingerspelling
+tutor. ISL fingerspelling uses both hands, often touching or overlapping, which
+is where webcam hand tracking is weakest. This page measures whether a laptop
+webcam can track and tell apart two-handed letters before any lessons are built.
+
+Run `npm run dev` and open `/isl-test.html` in Chrome with a webcam.
+
+**Protocol**
+
+1. From an ISL alphabet chart (or with a fluent ISL signer, which is better),
+   pick about six letters: two with the hands apart, two touching, two overlapping.
+2. In *Record letters*, record 5 samples of each.
+3. In *Measure*, run the 10-second test for each letter and tag how the hands
+   relate (apart / touching / overlapping). Repeat in a dim room.
+4. Download the CSV.
+
+**Reading the result.** A group passes when both hands are tracked in ≥95% of
+frames, the right letter is recognised in ≥90%, and a wrong letter in <5%.
+
+- *Touching* and *overlapping* pass → the concept is technically viable.
+- They fail on **Tracked** → the tracker loses hands when they meet; that's a
+  tracking limit (try camera angle and lighting before anything else).
+- Tracked is fine but **Right** is low → the matcher needs tuning; adjust the
+  sliders in *Live check* or record more samples.
+
+The matching logic lives in `src/isl/pose.ts`. On synthetic two-hand data it
+told apart letters differing by a single finger 100% of the time with
+realistic camera noise, and gave no wrong answers; under heavy noise it falls
+back to "unknown" rather than guessing. Synthetic data can't model hands
+hiding each other, which is what the webcam test is for.
