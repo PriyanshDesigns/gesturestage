@@ -75,7 +75,7 @@ export function Spell({ name, refs, dominant, onAttempt }: Props) {
       <main className="ish-page ish-narrow">
         <p className="ish-eyebrow">Spell a word</p>
         <h1 className="ish-display">Sign it letter by letter.</h1>
-        <p className="ish-lead">Your name is the best place to start. No dotted guide this time — tap “Show me” if you get stuck.</p>
+        <p className="ish-lead">Here's a word to start with — or type your own. No dotted guide this time; tap “Show me” if you get stuck.</p>
         <input
           className="ish-input ish-input-lg"
           value={draft}

@@ -87,12 +87,14 @@ Learn the Indian Sign Language alphabet with live feedback from the webcam.
 Gestures are the content being learned, not commands, so there's no Midas
 Touch problem.
 
-- **Onboarding** — your name (the first word you'll sign) and dominant hand.
-  Left-handed learners get mirrored references automatically.
+- **Onboarding** — your dominant hand. Left-handed learners get mirrored
+  references automatically. No name or account is asked for.
+- **First real word** — a random short word (a name, food, city…) on every
+  visit, with "Another word" to reshuffle; learn its letters, then spell it.
 - **Learn** — five lessons. Each letter shows the reference shape, draws it as
   a dotted guide pinned to your own wrist on the camera, names the finger to
   fix, and confirms once the shape is held for half a second.
-- **Spell** — sign your name (or any word) start to finish, from memory, timed.
+- **Spell** — sign the suggested word (or type any word) start to finish, from memory, timed.
 - **Practice** — spaced repetition (Leitner boxes): letters signed from memory
   move up, skipped or guided ones come back sooner.
 - **Progress** — every letter's memory level, accuracy and time to the right shape.

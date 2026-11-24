@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { randomWord } from "./letters";
 import { buildReferences, fetchBundledRefs } from "./references";
 import { go, useRoute, type Route } from "./router";
 import { DEFAULT_STATE, loadState, recordAttempt, saveState, type AppState, type Attempt, type RefSet } from "./store";
@@ -22,6 +23,7 @@ export default function App() {
   const [state, setState] = useState<AppState>(loadState);
   const [bundled, setBundled] = useState<RefSet | null>(null);
   const [loading, setLoading] = useState(true);
+  const [firstWord, setFirstWord] = useState(() => randomWord());
   const route = useRoute();
 
   useEffect(() => saveState(state), [state]);
@@ -60,7 +62,7 @@ export default function App() {
       break;
     }
     case "spell":
-      screen = <Spell name={profile.name} refs={refs} dominant={profile.dominant} onAttempt={onAttempt} />;
+      screen = <Spell key={route.params.get("w") ?? firstWord} name={route.params.get("w") ?? firstWord} refs={refs} dominant={profile.dominant} onAttempt={onAttempt} />;
       break;
     case "practice":
       screen = (
@@ -90,7 +92,7 @@ export default function App() {
       );
       break;
     default:
-      screen = <Home profile={profile} refs={refs} progress={progress} loading={loading} />;
+      screen = <Home word={firstWord} onShuffle={() => setFirstWord((w) => randomWord(w))} refs={refs} progress={progress} loading={loading} />;
   }
 
   const active = route.name === "learn" ? "home" : route.name;
@@ -135,9 +137,9 @@ export default function App() {
         </span>
         <button
           className="ish-link"
-          onClick={() => setState((s) => ({ ...s, profile: { ...DEFAULT_STATE.profile, name: s.profile.name, dominant: s.profile.dominant } }))}
+          onClick={() => setState((s) => ({ ...s, profile: { ...DEFAULT_STATE.profile, dominant: s.profile.dominant } }))}
         >
-          Change name or hand
+          Change dominant hand
         </button>
       </footer>
     </div>

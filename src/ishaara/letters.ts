@@ -16,3 +16,15 @@ export function nameLetters(name: string) {
 
 /** Elapsed-time clock for attempts (kept out of components' render scope). */
 export const clock = () => performance.now();
+
+/** Short, familiar words for the first real word; one is picked at random on every visit. */
+export const FIRST_WORDS = [
+  "ASHA", "RAVI", "MAYA", "NEHA", "ARJUN", "KABIR", "MEERA", "ROHAN", "TARA", "ZOYA",
+  "CHAI", "MANGO", "DELHI", "GOA", "LASSI", "KITE", "TIGER", "LOTUS", "HELLO", "FRIEND",
+  "MUMBAI", "PUNE", "DOSA", "QUIZ", "JAZZ", "VIBE", "WAVE", "YES", "BOX", "SKY",
+];
+
+export function randomWord(exclude?: string) {
+  const pool = FIRST_WORDS.filter((w) => w !== exclude);
+  return pool[Math.floor(Math.random() * pool.length)];
+}

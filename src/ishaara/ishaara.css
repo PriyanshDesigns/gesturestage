@@ -675,6 +675,17 @@ code {
     var(--surface);
 }
 
+.ish-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.ish-card-head .ish-link {
+  font-size: 14px;
+}
+
 .ish-name-card .ish-tiles {
   margin: 8px 0 18px;
 }

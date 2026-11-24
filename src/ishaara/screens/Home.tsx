@@ -1,17 +1,18 @@
 import { LESSONS, type References } from "../references";
 import { letterState, nameLetters } from "../letters";
-import { dueCount, type LetterProgress, type Profile } from "../store";
+import { dueCount, type LetterProgress } from "../store";
 import { go, learnRoute } from "../router";
 
 interface Props {
-  profile: Profile;
+  word: string;
+  onShuffle: () => void;
   refs: References;
   progress: Record<string, LetterProgress>;
   loading: boolean;
 }
 
-export function Home({ profile, refs, progress, loading }: Props) {
-  const name = nameLetters(profile.name);
+export function Home({ word, onShuffle, refs, progress, loading }: Props) {
+  const name = nameLetters(word);
   const unique = [...new Set(name)];
   const state = (l: string) => letterState(l, refs, progress);
   const nameMissing = unique.filter((l) => state(l) === "missing");
@@ -23,7 +24,7 @@ export function Home({ profile, refs, progress, loading }: Props) {
   return (
     <main className="ish-page">
       <header className="ish-hello">
-        <p className="ish-eyebrow">{profile.name ? `Hi ${profile.name}` : "Welcome"}</p>
+        <p className="ish-eyebrow">{seen === 0 ? "Welcome" : "Welcome back"}</p>
         <h1 className="ish-display">
           {seen === 0 ? "Your first letters are waiting." : `${refs.letters.filter((l) => state(l) === "mastered").length} of 26 letters solid.`}
         </h1>
@@ -46,45 +47,38 @@ export function Home({ profile, refs, progress, loading }: Props) {
 
       <div className="ish-home-grid">
         <section className="ish-card ish-name-card">
-          <p className="ish-eyebrow">Your first real word</p>
-          {name.length ? (
+          <div className="ish-card-head">
+            <p className="ish-eyebrow">Your first real word</p>
+            <button className="ish-link" onClick={onShuffle}>
+              Another word
+            </button>
+          </div>
+          <div className="ish-tiles ish-tiles-lg" aria-label={`Letters of ${word}`}>
+            {name.map((l, i) => (
+              <span key={i} className={`ish-tile st-${state(l)}`}>
+                {l}
+              </span>
+            ))}
+          </div>
+          {nameMissing.length > 0 ? (
+            <p className="ish-dim">
+              No reference yet for {nameMissing.join(", ")}. Add {nameMissing.length === 1 ? "it" : "them"} under Reference signs.
+            </p>
+          ) : nameToLearn.length > 0 ? (
             <>
-              <div className="ish-tiles ish-tiles-lg" aria-label={`Letters of ${profile.name}`}>
-                {name.map((l, i) => (
-                  <span key={i} className={`ish-tile st-${state(l)}`}>
-                    {l}
-                  </span>
-                ))}
-              </div>
-              {nameMissing.length > 0 ? (
-                <p className="ish-dim">
-                  No reference yet for {nameMissing.join(", ")}. Add {nameMissing.length === 1 ? "it" : "them"} under Reference
-                  signs.
-                </p>
-              ) : nameToLearn.length > 0 ? (
-                <>
-                  <p>
-                    Learn the {nameToLearn.length} {nameToLearn.length === 1 ? "letter" : "letters"} you haven't tried yet, then
-                    spell the whole name.
-                  </p>
-                  <button className="ish-btn ish-btn-primary" onClick={() => go(learnRoute(nameToLearn, `Letters in ${profile.name}`))}>
-                    Learn {nameToLearn.join(" ")}
-                  </button>
-                </>
-              ) : (
-                <>
-                  <p>You know every letter. Sign it start to finish.</p>
-                  <button className="ish-btn ish-btn-primary" onClick={() => go("spell")}>
-                    Spell {profile.name}
-                  </button>
-                </>
-              )}
+              <p>
+                Learn the {nameToLearn.length} {nameToLearn.length === 1 ? "letter" : "letters"} you haven't tried yet, then spell
+                the whole word.
+              </p>
+              <button className="ish-btn ish-btn-primary" onClick={() => go(learnRoute(nameToLearn, `Letters in ${word}`))}>
+                Learn {nameToLearn.join(" ")}
+              </button>
             </>
           ) : (
             <>
-              <p>Add your name and it becomes the first word you sign.</p>
-              <button className="ish-btn" onClick={() => go("spell")}>
-                Spell any word
+              <p>You know every letter. Sign it start to finish.</p>
+              <button className="ish-btn ish-btn-primary" onClick={() => go(`spell?w=${word}`)}>
+                Spell {word}
               </button>
             </>
           )}
