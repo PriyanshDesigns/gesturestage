@@ -1,20 +1,44 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { HandSide } from "../../isl/pose";
 import type { Profile } from "../store";
 import { HandIcon } from "../components/HandIcon";
+import { HandMorph } from "../components/HandMorph";
+import { mirrorTemplate, type References } from "../references";
+
+const DEMO_WORD = "HELLO";
 
 interface Props {
   initial: Profile;
+  refs: References;
   onDone: (profile: Profile) => void;
 }
 
-export function Onboarding({ initial, onDone }: Props) {
+export function Onboarding({ initial, refs, onDone }: Props) {
   const [step, setStep] = useState(0);
   const [dominant, setDominant] = useState<HandSide>(initial.dominant);
+  const [shown, setShown] = useState(0);
+
+  // References are built for the saved hand; mirror them live while choosing.
+  const frames = useMemo(
+    () =>
+      DEMO_WORD.split("").flatMap((letter) => {
+        const t = refs.display.get(letter);
+        if (!t) return [];
+        return [{ letter, template: dominant === initial.dominant ? t : mirrorTemplate(t) }];
+      }),
+    [refs, dominant, initial.dominant]
+  );
 
   return (
     <main className="ish-onboard">
+      <div className="ish-onboard-split">
       <div className="ish-onboard-card">
+        <div className="ish-onboard-brand">
+          <span className="ish-brand-mark" aria-hidden>
+            इ
+          </span>
+          Ishaara
+        </div>
         <div className="ish-steps" aria-label={`Step ${step + 1} of 2`}>
           {[0, 1].map((i) => (
             <span key={i} className={i <= step ? "on" : ""} />
@@ -74,6 +98,30 @@ export function Onboarding({ initial, onDone }: Props) {
             </div>
           </>
         )}
+      </div>
+
+      {frames.length > 0 && (
+        <aside className="ish-onboard-visual" aria-label={`Reference hand shapes spelling ${DEMO_WORD}`}>
+          <div className="ish-word-stage">
+            <HandMorph key={dominant} frames={frames} dominant={dominant} onLetter={setShown} />
+            <span className="ish-word-letter" aria-hidden>
+              {frames[shown]?.letter}
+            </span>
+          </div>
+          <div className="ish-word-tiles">
+            {DEMO_WORD.split("").map((l, i) => (
+              <span key={i} className={`ish-tile ${i === shown ? "is-lit st-mastered" : ""}`}>
+                {l}
+              </span>
+            ))}
+          </div>
+          <p className="ish-small ish-dim">
+            {step === 1
+              ? `Shown for a ${dominant.toLowerCase()}-handed signer, the way you'd see it in a mirror.`
+              : "“Hello”, fingerspelled — shapes recorded from real ISL signers."}
+          </p>
+        </aside>
+      )}
       </div>
     </main>
   );

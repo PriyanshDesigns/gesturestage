@@ -49,7 +49,7 @@ export default function App() {
   }
 
   if (!profile.onboarded && route.name !== "teach") {
-    return <Onboarding initial={profile} onDone={(p) => setState((s) => ({ ...s, profile: p }))} />;
+    return <Onboarding initial={profile} refs={refs} onDone={(p) => setState((s) => ({ ...s, profile: p }))} />;
   }
 
   let screen;
@@ -101,7 +101,7 @@ export default function App() {
       );
       break;
     default:
-      screen = <Home word={firstWord} onShuffle={() => setFirstWord((w) => randomWord(w))} refs={refs} progress={progress} loading={loading} />;
+      screen = <Home dominant={profile.dominant} word={firstWord} onShuffle={() => setFirstWord((w) => randomWord(w))} refs={refs} progress={progress} loading={loading} />;
   }
 
   const active = route.name === "learn" ? "home" : route.name;

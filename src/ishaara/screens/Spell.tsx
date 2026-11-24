@@ -148,7 +148,7 @@ export function Spell({ name, refs, dominant, onAttempt, strictness, onStrictnes
 
   return (
     <main className="ish-page ish-learn">
-      <header className="ish-learn-head">
+      <header className="ish-learn-head" style={{ ["--progress" as string]: index / playable.length }}>
         <button className="ish-link" onClick={() => setWord(null)}>
           ← Change word
         </button>
@@ -176,7 +176,7 @@ export function Spell({ name, refs, dominant, onAttempt, strictness, onStrictnes
         </aside>
         <section className="ish-learn-main">
           <CameraStage {...coach} celebrate={flash} />
-          <div className="ish-row ish-row-split">
+          <div className="ish-toolbar">
             <span className="ish-small ish-dim">{revealed ? "Guide on — this letter counts as assisted." : "From memory."}</span>
             <StrictnessPicker value={strictness} onChange={onStrictness} />
             <button className="ish-btn" onClick={() => next(false)} disabled={!!flash}>

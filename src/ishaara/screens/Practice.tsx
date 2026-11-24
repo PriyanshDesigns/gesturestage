@@ -124,7 +124,7 @@ export function Practice({ refs, progress, dominant, onAttempt, onSessionDone, s
 
   return (
     <main className="ish-page ish-learn">
-      <header className="ish-learn-head">
+      <header className="ish-learn-head" style={{ ["--progress" as string]: index / queue.length }}>
         <button className="ish-link" onClick={() => go("home")}>
           ← Home
         </button>
@@ -150,7 +150,7 @@ export function Practice({ refs, progress, dominant, onAttempt, onSessionDone, s
         </aside>
         <section className="ish-learn-main">
           <CameraStage {...coach} celebrate={flash} />
-          <div className="ish-row ish-row-split">
+          <div className="ish-toolbar">
             <span className="ish-small ish-dim">{revealed ? "Guide on — counts as assisted." : "From memory moves a letter up."}</span>
             <StrictnessPicker value={strictness} onChange={onStrictness} />
             <button className="ish-btn" onClick={() => next(false)} disabled={!!flash}>

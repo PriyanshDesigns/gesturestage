@@ -118,7 +118,7 @@ export function Lesson({ title, letters, refs, dominant, onAttempt, strictness, 
   const hands = handsFor(refs, letter);
   return (
     <main className="ish-page ish-learn">
-      <header className="ish-learn-head">
+      <header className="ish-learn-head" style={{ ["--progress" as string]: index / playable.length }}>
         <button className="ish-link" onClick={() => go("home")}>
           ← Lessons
         </button>
@@ -135,8 +135,10 @@ export function Lesson({ title, letters, refs, dominant, onAttempt, strictness, 
       <div className="ish-learn-grid">
         <aside className="ish-learn-side">
           <p className="ish-eyebrow">Letter {index + 1} of {playable.length}</p>
-          <h1 className="ish-letter-xl">{letter}</h1>
-          <p className="ish-dim">{hands === 2 ? "Uses both hands." : `Uses your ${dominant.toLowerCase()} hand.`}</p>
+          <div className="ish-letter-row">
+            <h1 className="ish-letter-xl">{letter}</h1>
+            <span className="ish-chip">{hands === 2 ? "Both hands" : `${dominant} hand only`}</span>
+          </div>
           <ReferenceCard letter={letter} template={refs.display.get(letter) ?? null} dominant={dominant} video={refs.videos[letter]} />
           <ol className="ish-howto">
             <li>Copy the shape — your hands appear in colour.</li>
@@ -147,7 +149,7 @@ export function Lesson({ title, letters, refs, dominant, onAttempt, strictness, 
 
         <section className="ish-learn-main">
           <CameraStage {...coach} celebrate={celebrate} />
-          <div className="ish-row ish-row-split">
+          <div className="ish-toolbar">
             <label className="ish-toggle">
               <input type="checkbox" checked={ghost} onChange={(e) => setGhost(e.target.checked)} />
               <span>Dotted guide</span>
