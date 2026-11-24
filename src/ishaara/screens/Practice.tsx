@@ -5,7 +5,8 @@ import type { References } from "../references";
 import { go } from "../router";
 import { pickPractice, type Attempt, type LetterProgress } from "../store";
 import { clock } from "../letters";
-import { useCoach } from "../useCoach";
+import { StrictnessPicker } from "../components/StrictnessPicker";
+import { useCoach, type Strictness } from "../useCoach";
 
 const SESSION_SIZE = 8;
 const BETWEEN_MS = 800;
@@ -15,6 +16,8 @@ interface Props {
   progress: Record<string, LetterProgress>;
   dominant: HandSide;
   onAttempt: (letter: string, attempt: Attempt) => void;
+  strictness: Strictness;
+  onStrictness: (s: Strictness) => void;
   onSessionDone: () => void;
 }
 
@@ -25,7 +28,7 @@ interface Result {
   assisted: boolean;
 }
 
-export function Practice({ refs, progress, dominant, onAttempt, onSessionDone }: Props) {
+export function Practice({ refs, progress, dominant, onAttempt, onSessionDone, strictness, onStrictness }: Props) {
   const [queue, setQueue] = useState(() => pickPractice(progress, refs.letters, SESSION_SIZE));
   const [index, setIndex] = useState(0);
   const [revealed, setRevealed] = useState(false);
@@ -55,6 +58,7 @@ export function Practice({ refs, progress, dominant, onAttempt, onSessionDone }:
   const coach = useCoach({
     refs,
     dominant,
+    strictness,
     target: flash ? null : letter,
     showGhost: revealed,
     attempt: index,
@@ -148,6 +152,7 @@ export function Practice({ refs, progress, dominant, onAttempt, onSessionDone }:
           <CameraStage {...coach} celebrate={flash} />
           <div className="ish-row ish-row-split">
             <span className="ish-small ish-dim">{revealed ? "Guide on — counts as assisted." : "From memory moves a letter up."}</span>
+            <StrictnessPicker value={strictness} onChange={onStrictness} />
             <button className="ish-btn" onClick={() => next(false)} disabled={!!flash}>
               Skip {letter}
             </button>

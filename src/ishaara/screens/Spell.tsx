@@ -4,7 +4,8 @@ import { CameraStage, ReferenceCard } from "../components/Coach";
 import type { References } from "../references";
 import { go } from "../router";
 import type { Attempt } from "../store";
-import { useCoach } from "../useCoach";
+import { StrictnessPicker } from "../components/StrictnessPicker";
+import { useCoach, type Strictness } from "../useCoach";
 import { clock, nameLetters } from "../letters";
 
 const BETWEEN_MS = 600;
@@ -14,9 +15,11 @@ interface Props {
   refs: References;
   dominant: HandSide;
   onAttempt: (letter: string, attempt: Attempt) => void;
+  strictness: Strictness;
+  onStrictness: (s: Strictness) => void;
 }
 
-export function Spell({ name, refs, dominant, onAttempt }: Props) {
+export function Spell({ name, refs, dominant, onAttempt, strictness, onStrictness }: Props) {
   const [draft, setDraft] = useState(name);
   const [word, setWord] = useState<string[] | null>(null);
   const [index, setIndex] = useState(0);
@@ -48,6 +51,7 @@ export function Spell({ name, refs, dominant, onAttempt }: Props) {
   const coach = useCoach({
     refs,
     dominant,
+    strictness,
     target: flash || finished ? null : letter,
     showGhost: revealed,
     attempt: index,
@@ -174,6 +178,7 @@ export function Spell({ name, refs, dominant, onAttempt }: Props) {
           <CameraStage {...coach} celebrate={flash} />
           <div className="ish-row ish-row-split">
             <span className="ish-small ish-dim">{revealed ? "Guide on — this letter counts as assisted." : "From memory."}</span>
+            <StrictnessPicker value={strictness} onChange={onStrictness} />
             <button className="ish-btn" onClick={() => next(false)} disabled={!!flash}>
               Skip {letter}
             </button>

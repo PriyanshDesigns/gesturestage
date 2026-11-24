@@ -290,6 +290,19 @@ code {
   opacity: 0.45;
 }
 
+.ish-strict {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.ish-segment-sm button {
+  min-height: 32px;
+  padding: 5px 12px;
+  font-size: 14px;
+}
+
 .ish-toggle {
   display: inline-flex;
   align-items: center;

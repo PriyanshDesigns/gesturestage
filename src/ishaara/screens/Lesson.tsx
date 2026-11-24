@@ -5,7 +5,8 @@ import { handsFor, type References } from "../references";
 import { go } from "../router";
 import type { Attempt } from "../store";
 import { clock } from "../letters";
-import { useCoach } from "../useCoach";
+import { StrictnessPicker } from "../components/StrictnessPicker";
+import { useCoach, type Strictness } from "../useCoach";
 
 const CELEBRATE_MS = 1100;
 
@@ -15,6 +16,8 @@ interface Props {
   refs: References;
   dominant: HandSide;
   onAttempt: (letter: string, attempt: Attempt) => void;
+  strictness: Strictness;
+  onStrictness: (s: Strictness) => void;
 }
 
 interface Result {
@@ -27,7 +30,7 @@ function seconds(ms: number) {
   return `${(ms / 1000).toFixed(1)}s`;
 }
 
-export function Lesson({ title, letters, refs, dominant, onAttempt }: Props) {
+export function Lesson({ title, letters, refs, dominant, onAttempt, strictness, onStrictness }: Props) {
   const playable = letters.filter((l) => refs.byLetter.has(l));
   const [index, setIndex] = useState(0);
   const [celebrate, setCelebrate] = useState<string | null>(null);
@@ -57,6 +60,7 @@ export function Lesson({ title, letters, refs, dominant, onAttempt }: Props) {
   const coach = useCoach({
     refs,
     dominant,
+    strictness,
     target: celebrate ? null : letter,
     showGhost: ghost,
     onCorrect: () => finish(false),
@@ -148,6 +152,7 @@ export function Lesson({ title, letters, refs, dominant, onAttempt }: Props) {
               <input type="checkbox" checked={ghost} onChange={(e) => setGhost(e.target.checked)} />
               <span>Dotted guide</span>
             </label>
+            <StrictnessPicker value={strictness} onChange={onStrictness} />
             <button className="ish-btn" onClick={() => finish(true)} disabled={!!celebrate}>
               Skip {letter}
             </button>

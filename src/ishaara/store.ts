@@ -1,9 +1,11 @@
 import type { HandSide, Template } from "../isl/pose";
+import type { Strictness } from "./useCoach";
 
 export interface Profile {
   name: string;
   dominant: HandSide;
   onboarded: boolean;
+  strictness?: Strictness;
 }
 
 /** Leitner-style memory box per letter: 0 = new, 4 = solid. */

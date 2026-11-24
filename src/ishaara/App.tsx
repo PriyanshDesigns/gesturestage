@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { randomWord } from "./letters";
+import type { Strictness } from "./useCoach";
 import { buildReferences, fetchBundledRefs } from "./references";
 import { go, useRoute, type Route } from "./router";
 import { DEFAULT_STATE, loadState, recordAttempt, saveState, type AppState, type Attempt, type RefSet } from "./store";
@@ -37,6 +38,12 @@ export default function App() {
   const { profile, progress } = state;
   const refs = useMemo(() => buildReferences(bundled, state.localRefs, profile.dominant), [bundled, state.localRefs, profile.dominant]);
 
+  const strictness = profile.strictness ?? "normal";
+  const strictProps = {
+    strictness,
+    onStrictness: (v: Strictness) => setState((s) => ({ ...s, profile: { ...s.profile, strictness: v } })),
+  };
+
   function onAttempt(letter: string, attempt: Attempt) {
     setState((s) => ({ ...s, progress: { ...s.progress, [letter]: recordAttempt(s.progress[letter], attempt) } }));
   }
@@ -57,12 +64,13 @@ export default function App() {
           refs={refs}
           dominant={profile.dominant}
           onAttempt={onAttempt}
+          {...strictProps}
         />
       );
       break;
     }
     case "spell":
-      screen = <Spell key={route.params.get("w") ?? firstWord} name={route.params.get("w") ?? firstWord} refs={refs} dominant={profile.dominant} onAttempt={onAttempt} />;
+      screen = <Spell key={route.params.get("w") ?? firstWord} name={route.params.get("w") ?? firstWord} refs={refs} dominant={profile.dominant} onAttempt={onAttempt} {...strictProps} />;
       break;
     case "practice":
       screen = (
@@ -71,6 +79,7 @@ export default function App() {
           progress={progress}
           dominant={profile.dominant}
           onAttempt={onAttempt}
+          {...strictProps}
           onSessionDone={() => setState((s) => ({ ...s, sessions: s.sessions + 1 }))}
         />
       );
