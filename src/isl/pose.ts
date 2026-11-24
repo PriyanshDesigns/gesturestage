@@ -54,7 +54,7 @@ function dist(a: Pt, b: Pt): number {
   return Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z);
 }
 
-function orderHands(hands: TrackedHand[], dominant: HandSide): TrackedHand[] {
+export function orderHands(hands: TrackedHand[], dominant: HandSide): TrackedHand[] {
   if (hands.length < 2) return hands.slice(0, 1);
   const [a, b] = hands;
   if (a.side !== b.side) return a.side === dominant ? [a, b] : [b, a];

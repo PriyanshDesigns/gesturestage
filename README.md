@@ -79,6 +79,32 @@ Webcam → Hand Tracker (MediaPipe) → Classifier → Dispatcher → Slides / P
 Figma file (design system + all 6 screens):
 https://www.figma.com/design/GPcLrYXQdwyzxsI13RsrlB
 
+## Ishaara — ISL fingerspelling tutor
+
+**Live:** https://gesturestage.vercel.app/ishaara/ · code in `src/ishaara/`
+
+Learn the Indian Sign Language alphabet with live feedback from the webcam.
+Gestures are the content being learned, not commands, so there's no Midas
+Touch problem.
+
+- **Onboarding** — your name (the first word you'll sign) and dominant hand.
+  Left-handed learners get mirrored references automatically.
+- **Learn** — five lessons. Each letter shows the reference shape, draws it as
+  a dotted guide pinned to your own wrist on the camera, names the finger to
+  fix, and confirms once the shape is held for half a second.
+- **Spell** — sign your name (or any word) start to finish, from memory, timed.
+- **Practice** — spaced repetition (Leitner boxes): letters signed from memory
+  move up, skipped or guided ones come back sooner.
+- **Progress** — every letter's memory level, accuracy and time to the right shape.
+- **Reference signs** — record each letter (5 samples) as a fluent signer forms
+  it, credit the signer, and export/import the set.
+
+**Reference signs aren't included.** Recognition compares learners to
+recordings by a fluent ISL signer, and none ship yet — the case study requires
+Deaf signers to record and review them. Until then, record them on the
+Reference signs screen (stored in your browser), or import a file. To ship a
+set to everyone, export it and save it as `public/ishaara/templates.json`.
+
 ## Ishaara — two-hand recognition test
 
 A feasibility test for the next concept, an Indian Sign Language fingerspelling

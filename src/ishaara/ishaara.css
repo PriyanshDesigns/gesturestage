@@ -1,0 +1,1197 @@
+:root {
+  --bg: #f6f1e9;
+  --surface: #fffdf9;
+  --surface-2: #efe8dc;
+  --ink: #1f1c18;
+  --dim: #6d665c;
+  --line: #e3dacb;
+  --accent: #0f6e6a;
+  --accent-ink: #fffdf9;
+  --accent-soft: #d6ebe7;
+  --marigold: #d9892b;
+  --marigold-soft: #f8e6cb;
+  --good: #2c8a57;
+  --bad: #b8492f;
+  --hand-dominant: #0f6e6a;
+  --hand-other: #d9892b;
+  --hand-joint: #fffdf9;
+  --hand-ghost: rgba(255, 253, 249, 0.92);
+  --shadow: 0 1px 2px rgba(31, 28, 24, 0.05), 0 8px 24px rgba(31, 28, 24, 0.06);
+  --radius: 18px;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14120f;
+    --surface: #1d1a16;
+    --surface-2: #27231e;
+    --ink: #f2ede4;
+    --dim: #a59c8f;
+    --line: #35302a;
+    --accent: #4db5ac;
+    --accent-ink: #0f1514;
+    --accent-soft: #1d3633;
+    --marigold: #e9a24c;
+    --marigold-soft: #3a2b17;
+    --good: #5cc58a;
+    --bad: #e07a5f;
+    --hand-dominant: #5fd0c6;
+    --hand-other: #f0ad57;
+    --hand-joint: #14120f;
+    --shadow: none;
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.5 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+:focus-visible {
+  outline: 3px solid var(--marigold);
+  outline-offset: 2px;
+}
+
+code {
+  font: 0.85em ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: var(--surface-2);
+  padding: 1px 5px;
+  border-radius: 5px;
+}
+
+/* ---------- Type ---------- */
+
+.ish-display {
+  font: 600 clamp(30px, 4.4vw, 46px) / 1.08 var(--font-display);
+  letter-spacing: -0.015em;
+  margin: 0 0 14px;
+  text-wrap: balance;
+}
+
+.ish-title {
+  font: 600 24px/1.2 var(--font-display);
+  margin: 0;
+}
+
+.ish-title-sm {
+  font: 600 18px/1.25 var(--font-display);
+  margin: 0;
+}
+
+.ish-eyebrow {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.ish-lead {
+  font-size: 18px;
+  color: var(--dim);
+  margin: 0 0 20px;
+  max-width: 60ch;
+  text-wrap: pretty;
+}
+
+.ish-small {
+  font-size: 14px;
+}
+
+.ish-dim {
+  color: var(--dim);
+}
+
+.ish-big-number {
+  font: 600 44px/1 var(--font-display);
+  margin: 0 0 6px;
+}
+
+.ish-letter-xl {
+  font: 600 96px/0.9 var(--font-display);
+  margin: 0 0 6px;
+  color: var(--accent);
+}
+
+/* ---------- Controls ---------- */
+
+.ish-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  font-weight: 500;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+}
+
+.ish-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.ish-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.ish-btn:disabled {
+  opacity: 0.5;
+}
+
+.ish-btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+.ish-btn-primary:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.ish-full {
+  width: 100%;
+}
+
+.ish-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--accent);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
+.ish-link:disabled {
+  opacity: 0.5;
+}
+
+.ish-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.ish-input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.ish-input-lg {
+  font: 600 26px/1.2 var(--font-display);
+  padding: 14px 18px;
+  margin-bottom: 14px;
+}
+
+.ish-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.ish-row-split {
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.ish-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.ish-stack .ish-row {
+  margin: 0;
+}
+
+.ish-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 14px 0;
+}
+
+.ish-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--dim);
+}
+
+.ish-segment {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 12px;
+  background: var(--surface-2);
+  gap: 3px;
+}
+
+.ish-segment button {
+  border: none;
+  background: transparent;
+  padding: 8px 16px;
+  border-radius: 9px;
+  font-weight: 500;
+  min-height: 38px;
+}
+
+.ish-segment button.on {
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.ish-segment button:disabled:not(.on) {
+  opacity: 0.45;
+}
+
+.ish-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.ish-toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+
+.ish-notice {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* ---------- Shell ---------- */
+
+.ish-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.ish-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 32px;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+
+.ish-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  padding: 0;
+  font: 600 21px/1 var(--font-display);
+}
+
+.ish-brand-mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 20px;
+  font-family: var(--font-body);
+  font-weight: 700;
+}
+
+.ish-nav-links {
+  display: flex;
+  gap: 2px;
+  margin-left: 12px;
+  overflow-x: auto;
+}
+
+.ish-nav-links button {
+  border: none;
+  background: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.ish-nav-links button:hover {
+  color: var(--ink);
+}
+
+.ish-nav-links button.on {
+  color: var(--ink);
+  background: var(--surface-2);
+}
+
+.ish-nav-hand {
+  margin-left: auto;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.ish-page {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 40px 32px 56px;
+  flex: 1;
+}
+
+.ish-narrow {
+  max-width: 720px;
+}
+
+.ish-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 20px;
+  padding: 20px 32px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--dim);
+}
+
+.ish-footer .ish-link {
+  font-size: 13px;
+}
+
+.ish-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+.ish-card p {
+  margin: 0 0 12px;
+}
+
+.ish-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  margin: 0 0 16px;
+}
+
+/* ---------- Onboarding ---------- */
+
+.ish-onboard {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+  background:
+    radial-gradient(1200px 500px at 85% -10%, var(--accent-soft), transparent 60%),
+    radial-gradient(900px 420px at -10% 110%, var(--marigold-soft), transparent 60%),
+    var(--bg);
+}
+
+.ish-onboard-card {
+  width: 100%;
+  max-width: 600px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: var(--shadow);
+}
+
+.ish-onboard-card .ish-title {
+  margin-bottom: 8px;
+}
+
+.ish-steps {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 28px;
+}
+
+.ish-steps span {
+  height: 4px;
+  width: 32px;
+  border-radius: 4px;
+  background: var(--line);
+}
+
+.ish-steps span.on {
+  background: var(--accent);
+}
+
+.ish-promises {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  display: grid;
+  gap: 12px;
+}
+
+.ish-promises li {
+  padding-left: 22px;
+  position: relative;
+  color: var(--dim);
+}
+
+.ish-promises li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--marigold);
+}
+
+.ish-promises strong {
+  color: var(--ink);
+}
+
+.ish-choice {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.ish-choice button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 22px 12px;
+  border-radius: 16px;
+  border: 2px solid var(--line);
+  background: var(--surface);
+  font-weight: 600;
+  color: var(--dim);
+}
+
+.ish-choice button.on {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* ---------- Tiles ---------- */
+
+.ish-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ish-tile {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 44px;
+  border-radius: 10px;
+  font: 600 20px/1 var(--font-display);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.ish-tiles-lg .ish-tile {
+  width: 52px;
+  height: 58px;
+  font-size: 28px;
+  border-radius: 12px;
+}
+
+.ish-tile-sm {
+  width: 32px;
+  height: 36px;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+.ish-tile-xs {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+}
+
+.ish-tile.st-new {
+  background: var(--surface);
+}
+
+.ish-tile.st-learning {
+  background: var(--marigold-soft);
+  border-color: color-mix(in srgb, var(--marigold) 45%, transparent);
+}
+
+.ish-tile.st-mastered {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.ish-tile.st-missing {
+  background: transparent;
+  border-style: dashed;
+  color: var(--dim);
+  opacity: 0.7;
+}
+
+.ish-tile.st-current {
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+
+.ish-tile-btn {
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.ish-tile-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.ish-tile-btn.is-selected {
+  box-shadow: 0 0 0 3px var(--marigold);
+}
+
+.ish-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--dim);
+}
+
+.ish-legend .ish-tile {
+  margin-left: 8px;
+}
+
+/* ---------- Home ---------- */
+
+.ish-hello {
+  margin-bottom: 28px;
+}
+
+.ish-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+  padding: 20px 22px;
+  margin-bottom: 24px;
+  border-radius: var(--radius);
+  background: var(--marigold-soft);
+  border: 1px solid color-mix(in srgb, var(--marigold) 40%, transparent);
+}
+
+.ish-banner h2 {
+  font: 600 18px/1.3 var(--font-display);
+  margin: 0 0 4px;
+}
+
+.ish-banner p {
+  margin: 0;
+  max-width: 64ch;
+  color: var(--dim);
+}
+
+.ish-home-grid {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 18px;
+  margin-bottom: 44px;
+}
+
+.ish-name-card {
+  background:
+    radial-gradient(500px 220px at 100% 0%, var(--accent-soft), transparent 70%),
+    var(--surface);
+}
+
+.ish-name-card .ish-tiles {
+  margin: 8px 0 18px;
+}
+
+.ish-path {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 14px;
+}
+
+.ish-lesson {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ish-lesson .ish-tiles {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.ish-lesson .ish-tile {
+  width: 100%;
+}
+
+.ish-lesson .ish-btn {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.ish-lesson-head {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.ish-lesson-head h3 {
+  margin: 0;
+  font: 600 18px/1.2 var(--font-display);
+}
+
+.ish-lesson-head p {
+  margin: 0;
+}
+
+.ish-lesson-num {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--surface-2);
+  font-weight: 600;
+  color: var(--dim);
+}
+
+/* ---------- Learn / practice ---------- */
+
+.ish-learn {
+  padding-top: 20px;
+}
+
+.ish-learn-head {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.ish-learn-head > :last-child {
+  justify-self: end;
+}
+
+.ish-learn-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.ish-learn-side .ish-dim {
+  margin: 0 0 16px;
+}
+
+.ish-howto {
+  margin: 18px 0 0;
+  padding-left: 20px;
+  color: var(--dim);
+  font-size: 14px;
+  display: grid;
+  gap: 4px;
+}
+
+.ish-ref {
+  margin: 0;
+}
+
+.ish-ref-frame {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at 50% 45%, var(--surface), var(--surface-2) 75%);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.ish-ref-frame canvas,
+.ish-ref-frame video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scaleX(-1);
+}
+
+.ish-ref-tag {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  font: 600 18px/1 var(--font-display);
+  color: var(--dim);
+}
+
+.ish-ref figcaption {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--dim);
+}
+
+.ish-ref-reveal {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: repeating-linear-gradient(-45deg, transparent 0 10px, color-mix(in srgb, var(--line) 50%, transparent) 10px 11px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.ish-ref-letter {
+  font: 600 64px/1 var(--font-display);
+  color: var(--line);
+}
+
+.ish-stage {
+  position: relative;
+  width: 100%;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #0d0c0a;
+  outline: 3px solid transparent;
+  outline-offset: 3px;
+  transition: outline-color 0.25s;
+}
+
+.ish-stage.tone-close {
+  outline-color: color-mix(in srgb, var(--marigold) 70%, transparent);
+}
+
+.ish-stage.tone-good {
+  outline-color: var(--good);
+}
+
+.ish-stage video,
+.ish-stage canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.ish-stage-msg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 24px;
+  text-align: center;
+  color: #f2ede4;
+  background: rgba(13, 12, 10, 0.75);
+}
+
+.ish-stage-msg span {
+  max-width: 44ch;
+  color: #c9c0b3;
+  font-size: 14px;
+}
+
+.ish-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: calc(100% - 32px);
+  padding: 10px 18px 10px 10px;
+  border-radius: 999px;
+  background: rgba(20, 18, 15, 0.82);
+  color: #f6f1e9;
+  font-size: 16px;
+  font-weight: 500;
+  backdrop-filter: blur(6px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ish-hint.is-activity {
+  padding-left: 18px;
+  font-weight: 600;
+}
+
+.ish-hint-ring {
+  --p: 0;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side, rgba(20, 18, 15, 1) 68%, transparent 70%),
+    conic-gradient(#5cc58a calc(var(--p) * 360deg), rgba(255, 255, 255, 0.18) 0);
+}
+
+.ish-meter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.ish-meter div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--marigold), #5cc58a);
+  transition: width 0.2s;
+}
+
+.ish-celebrate {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: color-mix(in srgb, var(--good) 30%, transparent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 20px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+  animation: ish-pop 0.35s ease-out;
+}
+
+.ish-celebrate-letter {
+  font: 600 128px/1 var(--font-display);
+}
+
+@keyframes ish-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ish-celebrate {
+    animation: none;
+  }
+}
+
+.ish-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.ish-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+.ish-dots span.done {
+  background: var(--accent);
+}
+
+.ish-dots span.now {
+  background: var(--marigold);
+  box-shadow: 0 0 0 3px var(--marigold-soft);
+}
+
+.ish-results {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 20px;
+  display: grid;
+  gap: 8px;
+}
+
+.ish-results li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* ---------- Progress ---------- */
+
+.ish-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.ish-stats .ish-card p:last-child {
+  margin: 0;
+}
+
+.ish-alphabet {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 10px;
+}
+
+.ish-alpha {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.ish-alpha.st-missing {
+  border-style: dashed;
+  background: transparent;
+  color: var(--dim);
+}
+
+.ish-alpha.st-mastered {
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  background: var(--accent-soft);
+}
+
+.ish-alpha-letter {
+  font: 600 30px/1 var(--font-display);
+}
+
+.ish-box {
+  display: flex;
+  gap: 3px;
+  margin: 4px 0 2px;
+}
+
+.ish-box i {
+  width: 18px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--line);
+}
+
+.ish-box i.on {
+  background: var(--marigold);
+}
+
+.ish-box i.on.solid {
+  background: var(--accent);
+}
+
+/* ---------- Teach ---------- */
+
+.ish-teach-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  align-items: start;
+}
+
+.ish-teach-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ish-teach-main .ish-card {
+  margin-top: 16px;
+}
+
+.ish-teach-side {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ish-teach-side .ish-ref {
+  margin-bottom: 4px;
+}
+
+.ish-teach-side .ish-ref-frame {
+  max-width: 220px;
+}
+
+.ish-teach-letters {
+  display: grid;
+  grid-template-columns: repeat(13, 1fr);
+  gap: 6px;
+}
+
+.ish-teach-letters .ish-tile {
+  width: 100%;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 960px) {
+  .ish-learn-grid,
+  .ish-teach-grid,
+  .ish-home-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ish-learn-side {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 20px;
+    align-items: center;
+  }
+
+  .ish-learn-side .ish-ref {
+    grid-row: span 3;
+    grid-column: 2;
+    max-width: 200px;
+    justify-self: end;
+  }
+
+  .ish-howto {
+    display: none;
+  }
+
+  .ish-teach-letters {
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .ish-nav {
+    padding: 10px 16px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .ish-nav-links {
+    order: 3;
+    width: 100%;
+    margin: 0;
+  }
+
+  .ish-page {
+    padding: 24px 16px 40px;
+  }
+
+  .ish-footer {
+    padding: 16px;
+  }
+
+  .ish-onboard-card {
+    padding: 28px 20px;
+  }
+
+  .ish-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .ish-learn-head {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  .ish-learn-head > :last-child {
+    justify-self: start;
+  }
+
+  .ish-letter-xl {
+    font-size: 72px;
+  }
+
+  .ish-hint {
+    font-size: 14px;
+    bottom: 12px;
+    white-space: normal;
+  }
+
+  .ish-tiles-lg .ish-tile {
+    width: 42px;
+    height: 48px;
+    font-size: 22px;
+  }
+}
