@@ -1,5 +1,5 @@
 import { shapeDistance, type HandSide, type Pt, type Template } from "../isl/pose";
-import type { RefSet } from "./store";
+import type { Credit, RefSet } from "./store";
 
 export const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
@@ -45,7 +45,8 @@ export function parseRefSet(raw: unknown): RefSet | null {
   return {
     version: 1,
     dominant: obj?.dominant === "Left" ? "Left" : "Right",
-    signer: typeof obj?.signer === "string" ? obj.signer : undefined,
+    signer: typeof obj?.signer === "string" && obj.signer ? obj.signer : undefined,
+    credit: typeof obj?.credit?.text === "string" ? obj.credit : undefined,
     templates,
     videos: obj?.videos && typeof obj.videos === "object" ? obj.videos : undefined,
   };
@@ -74,6 +75,7 @@ export interface References {
   letters: string[];
   videos: Record<string, string>;
   signers: string[];
+  credits: Credit[];
   localLetters: Set<string>;
 }
 
@@ -110,6 +112,7 @@ export function buildReferences(bundled: RefSet | null, local: RefSet | null, le
     letters: ALPHABET.filter((a) => byLetter.has(a)),
     videos: { ...b?.videos, ...l?.videos },
     signers: [...new Set(signers)],
+    credits: [b?.credit, l?.credit].filter((c): c is Credit => !!c),
     localLetters,
   };
 }

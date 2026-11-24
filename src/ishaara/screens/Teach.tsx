@@ -158,6 +158,21 @@ export function Teach({ refs, bundledCount, local, learnerDominant, onChange }: 
         </p>
       </header>
 
+      {refs.credits.length > 0 && (
+        <section className="ish-credit" aria-label="Reference sign sources">
+          {refs.credits.map((c) => (
+            <p key={c.text}>
+              {c.text}{" "}
+              {c.url && (
+                <a href={c.url} target="_blank" rel="noreferrer">
+                  {c.url.replace(/^https?:\/\//, "")}
+                </a>
+              )}
+            </p>
+          ))}
+        </section>
+      )}
+
       <div className="ish-teach-grid">
         <section className="ish-teach-main">
           <div className="ish-stage tone-idle" style={{ aspectRatio: String(aspect) }}>

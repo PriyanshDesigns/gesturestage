@@ -22,8 +22,16 @@ export interface RefSet {
   version: 1;
   dominant: HandSide;
   signer?: string;
+  credit?: Credit;
   templates: Template[];
   videos?: Record<string, string>;
+}
+
+/** Attribution for a set taken from published work (required by CC BY). */
+export interface Credit {
+  text: string;
+  url?: string;
+  license?: string;
 }
 
 export interface AppState {

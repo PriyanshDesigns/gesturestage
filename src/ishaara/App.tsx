@@ -124,7 +124,14 @@ export default function App() {
       <footer className="ish-footer">
         <span>
           Video is processed on this device and never uploaded.
-          {refs.signers.length ? ` Reference signs by ${refs.signers.join(", ")}.` : ""}
+          {refs.signers.length ? ` Reference signs: ${refs.signers.join(", ")}` : ""}
+          {refs.credits.map((c) => (
+            <span key={c.text}>
+              {" "}
+              ({c.url ? <a href={c.url} target="_blank" rel="noreferrer">source</a> : "source"}
+              {c.license ? `, ${c.license}` : ""}).
+            </span>
+          ))}
         </span>
         <button
           className="ish-link"

@@ -99,11 +99,15 @@ Touch problem.
 - **Reference signs** — record each letter (5 samples) as a fluent signer forms
   it, credit the signer, and export/import the set.
 
-**Reference signs aren't included.** Recognition compares learners to
-recordings by a fluent ISL signer, and none ship yet — the case study requires
-Deaf signers to record and review them. Until then, record them on the
-Reference signs screen (stored in your browser), or import a file. To ship a
-set to everyone, export it and save it as `public/ishaara/templates.json`.
+**Reference signs.** The shipped A–Z references were extracted from the
+openly licensed *Multimodal Indian Sign Language Dataset for English and Marathi
+Alphabets* (Hambir et al., Mendeley Data, 2026,
+[doi:10.17632/2tj6c7pzfk.1](https://doi.org/10.17632/2tj6c7pzfk.1), CC BY 4.0):
+photos from four signers, run through the same hand tracker the app uses
+(`tools/reference-extractor/`). They are not yet reviewed by a Deaf ISL signer,
+which the case study requires before release. Letters recorded on the Reference
+signs screen replace shipped ones in that browser; export a set and save it as
+`public/ishaara/templates.json` to ship it.
 
 ## Ishaara — two-hand recognition test
 
