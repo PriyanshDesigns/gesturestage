@@ -127,6 +127,84 @@ export function shapeDistance(a: Pt[], b: Pt[]): number {
   return (sum / count + worst) / 2;
 }
 
+// ---------- Tolerant letter distance (used by the Ishaara tutor) ----------
+
+const TILTS = [-0.35, -0.17, 0, 0.17, 0.35].map((a) => ({ c: Math.cos(a), s: Math.sin(a) })); // about ±20°
+const PLACEMENT_FREE = 0.8; // hand-size units of spacing difference that cost nothing
+const PLACEMENT_WEIGHT = 0.15;
+const Z_SOFTEN = 0.5;
+
+/** One hand's 21 points, moved so its own wrist is the origin. */
+export function handLocal(points: Pt[], h: number): Pt[] {
+  const w = points[h * 21];
+  const out: Pt[] = [];
+  for (let i = 0; i < 21; i++) {
+    const p = points[h * 21 + i];
+    out.push({ x: p.x - w.x, y: p.y - w.y, z: (p.z - w.z) * Z_SOFTEN });
+  }
+  return out;
+}
+
+function regionScore(a: Pt[], b: Pt[]) {
+  let sum = 0;
+  let worst = 0;
+  for (const region of REGIONS) {
+    let e = 0;
+    for (const i of region) e += dist(a[i], b[i]);
+    e /= region.length;
+    sum += e;
+    worst = Math.max(worst, e);
+  }
+  return { sum, worst, count: REGIONS.length };
+}
+
+/**
+ * Like shapeDistance, but forgiving of the things that vary between people
+ * and cameras rather than between letters: each hand's shape is compared
+ * around its own wrist (so how far apart the hands are matters only a
+ * little), a small wrist tilt is allowed, and depth counts for less.
+ */
+export function letterDistance(live: Pt[], ref: Pt[]): number {
+  const hands = live.length / 21;
+  let sum = 0;
+  let worst = 0;
+  let count = 0;
+  for (let h = 0; h < hands; h++) {
+    const a = handLocal(live, h);
+    const b = handLocal(ref, h);
+    let best: { sum: number; worst: number; count: number } | null = null;
+    for (const { c, s } of TILTS) {
+      const turned = a.map((p) => ({ x: p.x * c - p.y * s, y: p.x * s + p.y * c, z: p.z }));
+      const r = regionScore(turned, b);
+      if (!best || r.sum + r.count * r.worst < best.sum + best.count * best.worst) best = r;
+    }
+    sum += best!.sum;
+    worst = Math.max(worst, best!.worst);
+    count += best!.count;
+  }
+  let placement = 0;
+  if (hands === 2) {
+    const dx = live[21].x - ref[21].x;
+    const dy = live[21].y - ref[21].y;
+    placement = Math.max(0, Math.hypot(dx, dy) - PLACEMENT_FREE) * PLACEMENT_WEIGHT;
+  }
+  return (sum / count + worst) / 2 + placement;
+}
+
+/** Both hands' points, each around its own wrist: for finger hints that ignore spacing. */
+export function localPose(points: Pt[]): Pt[] {
+  const out: Pt[] = [];
+  for (let h = 0; h < points.length / 21; h++) out.push(...handLocal(points, h));
+  return out;
+}
+
+/** Live points with the two hands' order swapped, re-anchored on the other wrist. */
+export function swapHands(points: Pt[]): Pt[] {
+  if (points.length !== 42) return points;
+  const w = points[21];
+  return [...points.slice(21), ...points.slice(0, 21)].map((p) => ({ x: p.x - w.x, y: p.y - w.y, z: p.z }));
+}
+
 export function classify(pose: Pose, templates: Template[], settings: MatchSettings): Match {
   const bestPerLetter = new Map<string, { distance: number; template: Template }>();
   for (const t of templates) {

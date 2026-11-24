@@ -6,6 +6,7 @@ import { go } from "../router";
 import { pickPractice, type Attempt, type LetterProgress } from "../store";
 import { clock } from "../letters";
 import { StrictnessPicker } from "../components/StrictnessPicker";
+import { useDiagnostics } from "../diagnostics";
 import { useCoach, type Strictness } from "../useCoach";
 
 const SESSION_SIZE = 8;
@@ -55,6 +56,7 @@ export function Practice({ refs, progress, dominant, onAttempt, onSessionDone, s
     setTimeout(advance, BETWEEN_MS);
   }
 
+  const [diagnostics, setDiagnostics] = useDiagnostics();
   const coach = useCoach({
     refs,
     dominant,
@@ -149,9 +151,13 @@ export function Practice({ refs, progress, dominant, onAttempt, onSessionDone, s
           />
         </aside>
         <section className="ish-learn-main">
-          <CameraStage {...coach} celebrate={flash} />
+          <CameraStage {...coach} celebrate={flash} diagnostics={diagnostics} />
           <div className="ish-toolbar">
             <span className="ish-small ish-dim">{revealed ? "Guide on — counts as assisted." : "From memory moves a letter up."}</span>
+            <label className="ish-toggle ish-toggle-quiet">
+              <input type="checkbox" checked={diagnostics} onChange={(e) => setDiagnostics(e.target.checked)} />
+              <span>What it sees</span>
+            </label>
             <StrictnessPicker value={strictness} onChange={onStrictness} />
             <button className="ish-btn" onClick={() => next(false)} disabled={!!flash}>
               Skip {letter}

@@ -11,11 +11,14 @@ interface StageProps {
   aspect: number;
   view: CoachView;
   celebrate?: string | null;
+  diagnostics?: boolean;
+  recording?: boolean;
+  record?: () => void;
   children?: ReactNode;
 }
 
 /** Mirrored camera with live hands, the ghost target, the hint and the hold ring. */
-export function CameraStage({ videoRef, canvasRef, status, error, aspect, view, celebrate, children }: StageProps) {
+export function CameraStage({ videoRef, canvasRef, status, error, aspect, view, celebrate, diagnostics, recording, record, children }: StageProps) {
   return (
     <div className={`ish-stage tone-${celebrate ? "good" : view.tone}`} style={{ aspectRatio: String(aspect) }}>
       <video ref={videoRef} muted playsInline />
@@ -43,6 +46,38 @@ export function CameraStage({ videoRef, canvasRef, status, error, aspect, view, 
       {status === "ready" && (
         <div className="ish-meter" aria-hidden>
           <div style={{ width: `${Math.round((celebrate ? 1 : view.closeness) * 100)}%` }} />
+        </div>
+      )}
+      {diagnostics && status === "ready" && view.debug && (
+        <div className="ish-diag" aria-label="What the camera sees">
+          <div className="ish-diag-row">
+            <strong>Hands</strong>
+            <span>
+              {view.debug.hands.length
+                ? view.debug.hands.map((h) => `${h.side} ${Math.round(h.score * 100)}%`).join(" · ")
+                : "none"}
+            </span>
+          </div>
+          <div className="ish-diag-row">
+            <strong>{view.debug.target}</strong>
+            <span className={view.debug.matching ? "is-ok" : ""}>
+              {Number.isFinite(view.debug.targetDistance) ? view.debug.targetDistance.toFixed(2) : "—"} / needs ≤ {view.debug.threshold.toFixed(2)}
+            </span>
+          </div>
+          <div className="ish-diag-bars">
+            {view.debug.nearest.map((n) => (
+              <div key={n.letter} className={n.letter === view.debug!.target ? "is-target" : ""}>
+                <span>{n.letter}</span>
+                <i style={{ width: `${Math.max(4, 100 - Math.min(100, (n.distance / (view.debug!.threshold * 2.5)) * 100))}%` }} />
+                <em>{n.distance.toFixed(2)}</em>
+              </div>
+            ))}
+          </div>
+          {record && (
+            <button className="ish-diag-rec" onClick={record} disabled={recording}>
+              {recording ? "Recording 5 s… hold the letter" : "Record 5 s to share"}
+            </button>
+          )}
         </div>
       )}
       {children}

@@ -10,7 +10,11 @@
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { classify, shapeDistance, toPose, DEFAULT_MATCH_SETTINGS, type HandSide, type Pt, type Template, type TrackedHand } from "../../src/isl/pose";
+import { letterDistance, swapHands, toPose, type HandSide, type Pt, type Template, type TrackedHand } from "../../src/isl/pose";
+
+// Same comparison the app uses (two-hand poses tried both ways round).
+const shapeDistance = (a: Pt[], b: Pt[]) => (a.length === 42 ? Math.min(letterDistance(a, b), letterDistance(swapHands(a), b)) : letterDistance(a, b));
+const THRESHOLD = 0.4; // STRICTNESS.normal in src/ishaara/useCoach.ts
 
 interface Raw {
   letter: string;
@@ -113,11 +117,14 @@ let right = 0;
 let wrong = 0;
 for (const t of kept) {
   const others = kept.filter((o) => o !== t);
-  const m = classify({ sides: t.sides, points: t.points }, others, DEFAULT_MATCH_SETTINGS);
-  if (m.accepted === t.letter) right++;
-  else if (m.accepted) {
+  const per = new Map<string, number>();
+  for (const o of others) if (o.points.length === t.points.length) per.set(o.letter, Math.min(per.get(o.letter) ?? Infinity, shapeDistance(t.points, o.points)));
+  const ranked = [...per].sort((a, b) => a[1] - b[1]);
+  const accepted = ranked[0] && ranked[0][1] <= THRESHOLD ? ranked[0][0] : null;
+  if (accepted === t.letter) right++;
+  else if (accepted) {
     wrong++;
-    (confusions[t.letter] ??= {})[m.accepted] = ((confusions[t.letter] ??= {})[m.accepted] ?? 0) + 1;
+    (confusions[t.letter] ??= {})[accepted] = ((confusions[t.letter] ??= {})[accepted] ?? 0) + 1;
   }
 }
 

@@ -6,6 +6,7 @@ import { go } from "../router";
 import type { Attempt } from "../store";
 import { clock } from "../letters";
 import { StrictnessPicker } from "../components/StrictnessPicker";
+import { useDiagnostics } from "../diagnostics";
 import { useCoach, type Strictness } from "../useCoach";
 
 const CELEBRATE_MS = 1100;
@@ -57,6 +58,7 @@ export function Lesson({ title, letters, refs, dominant, onAttempt, strictness, 
     }, CELEBRATE_MS);
   }
 
+  const [diagnostics, setDiagnostics] = useDiagnostics();
   const coach = useCoach({
     refs,
     dominant,
@@ -148,11 +150,15 @@ export function Lesson({ title, letters, refs, dominant, onAttempt, strictness, 
         </aside>
 
         <section className="ish-learn-main">
-          <CameraStage {...coach} celebrate={celebrate} />
+          <CameraStage {...coach} celebrate={celebrate} diagnostics={diagnostics} />
           <div className="ish-toolbar">
             <label className="ish-toggle">
               <input type="checkbox" checked={ghost} onChange={(e) => setGhost(e.target.checked)} />
               <span>Dotted guide</span>
+            </label>
+            <label className="ish-toggle ish-toggle-quiet">
+              <input type="checkbox" checked={diagnostics} onChange={(e) => setDiagnostics(e.target.checked)} />
+              <span>What it sees</span>
             </label>
             <StrictnessPicker value={strictness} onChange={onStrictness} />
             <button className="ish-btn" onClick={() => finish(true)} disabled={!!celebrate}>

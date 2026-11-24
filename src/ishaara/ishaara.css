@@ -1393,6 +1393,90 @@ code {
   transition: width 0.2s;
 }
 
+.ish-diag {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: min(250px, calc(100% - 28px));
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(20, 18, 15, 0.84);
+  color: #f2ede4;
+  font-size: 13px;
+  backdrop-filter: blur(6px);
+  display: grid;
+  gap: 8px;
+  z-index: 2;
+}
+
+.ish-diag-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.ish-diag-row span {
+  color: #c9c0b3;
+  font-variant-numeric: tabular-nums;
+}
+
+.ish-diag-row .is-ok {
+  color: #7ee0a6;
+}
+
+.ish-diag-bars {
+  display: grid;
+  gap: 4px;
+}
+
+.ish-diag-bars div {
+  display: grid;
+  grid-template-columns: 18px 1fr 36px;
+  align-items: center;
+  gap: 8px;
+}
+
+.ish-diag-bars i {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.ish-diag-bars .is-target i {
+  background: #e9a24c;
+}
+
+.ish-diag-bars .is-target span {
+  color: #e9a24c;
+  font-weight: 700;
+}
+
+.ish-diag-bars em {
+  font-style: normal;
+  text-align: right;
+  color: #c9c0b3;
+  font-variant-numeric: tabular-nums;
+}
+
+.ish-diag-rec {
+  margin-top: 2px;
+  padding: 7px 10px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  color: #f2ede4;
+  font-weight: 600;
+}
+
+.ish-diag-rec:disabled {
+  color: #e9a24c;
+  border-color: #e9a24c;
+}
+
+.ish-toggle-quiet {
+  color: var(--dim);
+}
+
 .ish-celebrate {
   position: absolute;
   inset: 0;
@@ -1421,7 +1505,91 @@ code {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ish-celebrate {
+  .ish-diag {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: min(250px, calc(100% - 28px));
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(20, 18, 15, 0.84);
+  color: #f2ede4;
+  font-size: 13px;
+  backdrop-filter: blur(6px);
+  display: grid;
+  gap: 8px;
+  z-index: 2;
+}
+
+.ish-diag-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.ish-diag-row span {
+  color: #c9c0b3;
+  font-variant-numeric: tabular-nums;
+}
+
+.ish-diag-row .is-ok {
+  color: #7ee0a6;
+}
+
+.ish-diag-bars {
+  display: grid;
+  gap: 4px;
+}
+
+.ish-diag-bars div {
+  display: grid;
+  grid-template-columns: 18px 1fr 36px;
+  align-items: center;
+  gap: 8px;
+}
+
+.ish-diag-bars i {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.ish-diag-bars .is-target i {
+  background: #e9a24c;
+}
+
+.ish-diag-bars .is-target span {
+  color: #e9a24c;
+  font-weight: 700;
+}
+
+.ish-diag-bars em {
+  font-style: normal;
+  text-align: right;
+  color: #c9c0b3;
+  font-variant-numeric: tabular-nums;
+}
+
+.ish-diag-rec {
+  margin-top: 2px;
+  padding: 7px 10px;
+  border-radius: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  color: #f2ede4;
+  font-weight: 600;
+}
+
+.ish-diag-rec:disabled {
+  color: #e9a24c;
+  border-color: #e9a24c;
+}
+
+.ish-toggle-quiet {
+  color: var(--dim);
+}
+
+.ish-celebrate {
     animation: none;
   }
 }
