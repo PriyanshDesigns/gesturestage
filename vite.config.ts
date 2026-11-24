@@ -11,6 +11,7 @@ export default defineConfig({
         main: fileURLToPath(new URL('./index.html', import.meta.url)),
         islTest: fileURLToPath(new URL('./isl-test.html', import.meta.url)),
         ishaara: fileURLToPath(new URL('./ishaara/index.html', import.meta.url)),
+        zerog: fileURLToPath(new URL('./zerog/index.html', import.meta.url)),
       },
     },
   },

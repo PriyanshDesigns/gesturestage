@@ -29,9 +29,9 @@ On wide screens the camera preview and a gesture cheat-sheet sit beside the stag
 | Pose | In the chamber | Why it feels right |
 |---|---|---|
 | **Open palm** | **Sweep.** The palm is a solid paddle (candies bounce off it) plus a soft wind field that carries nearby candies the way the hand moves. Slow hand = nudge, fast swipe = shove. | Pushing things around with your hand |
-| **Pinch** | **Grab.** Takes up to 3 candies nearest the pinch and holds them on taffy strands. Open the pinch to let go; they keep the hand's momentum, so you can throw them. | Picking up a candy |
+| **Pinch** | **Grab + colour magnet.** Picks up the single candy nearest your fingers on a taffy strand. Carry it through the crowd: same-colour candies (and Wonka Bars) it touches stick to the bunch, up to 3. A held bunch of 3 pops in your hand. Open the pinch to let go; candies keep the hand's momentum, so you can throw them. | Picking up a candy |
 | **Fist** | **Freeze.** Strongly damps everything near the fist. Stops a cluster drifting apart before it pops. | Clenching to hold still |
-| **Point** | **Poke.** The fingertip is a small solid ball for precise flicks. Outside the chamber it is the UI cursor: hover a button for 0.8 s to press it. | Pointing / tapping |
+| **Point** | **Cursor.** It does nothing in the chamber, which is the safe pose for reaching the buttons. Hover a button (power-ups, pause, menus) for 0.8 s to press it. | Pointing at something |
 
 Two hands work independently. Typical moves: hold a pair with a pinch and sweep the third in with the other palm, or freeze one side while you sweep the other.
 
