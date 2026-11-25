@@ -10,7 +10,7 @@
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { letterDistance, swapHands, toPose, type HandSide, type Pt, type Template, type TrackedHand } from "../../src/isl/pose";
+import { letterDistance, swapHands, toPose, SCALE_VERSION, type HandSide, type Pt, type Template, type TrackedHand } from "../../src/isl/pose";
 
 // Same comparison the app uses (two-hand poses tried both ways round).
 const shapeDistance = (a: Pt[], b: Pt[]) => (a.length === 42 ? Math.min(letterDistance(a, b), letterDistance(swapHands(a), b)) : letterDistance(a, b));
@@ -134,6 +134,7 @@ console.log("Confusions:", JSON.stringify(confusions));
 
 const set = {
   version: 1,
+  scale: SCALE_VERSION,
   dominant: "Right",
   signer: "Hambir et al. (2026), VIT Pune",
   credit: {

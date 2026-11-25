@@ -25,6 +25,8 @@ export interface RefSet {
   dominant: HandSide;
   signer?: string;
   credit?: Credit;
+  /** Normalisation version of the points (see SCALE_VERSION in isl/pose). Missing = 1. */
+  scale?: number;
   templates: Template[];
   videos?: Record<string, string>;
 }
@@ -81,9 +83,9 @@ export function loadTestPageTemplates(): RefSet | null {
   try {
     const raw = localStorage.getItem(TEST_PAGE_KEY);
     if (!raw) return null;
-    const parsed = JSON.parse(raw) as { dominant?: HandSide; templates?: Template[] };
+    const parsed = JSON.parse(raw) as { dominant?: HandSide; templates?: Template[]; scale?: number };
     if (!parsed.templates?.length) return null;
-    return { version: 1, dominant: parsed.dominant ?? "Right", templates: parsed.templates };
+    return { version: 1, dominant: parsed.dominant ?? "Right", templates: parsed.templates, scale: parsed.scale };
   } catch {
     return null;
   }

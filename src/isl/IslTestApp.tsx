@@ -3,11 +3,13 @@ import {
   classify,
   fingerIssues,
   passes,
+  rescaleTemplate,
   shapeDistance,
   summarizeRun,
   toPose,
   DEFAULT_MATCH_SETTINGS,
   PASS_BAR,
+  SCALE_VERSION,
   type FingerIssue,
   type FrameRecord,
   type HandSide,
@@ -291,7 +293,9 @@ export default function IslTestApp() {
         (t) => typeof t?.letter === "string" && Array.isArray(t.points) && Array.isArray(t.sides) && t.points.length === t.sides.length * 21
       );
       if (!valid.length) throw new Error("no templates");
-      setTemplates((prev) => [...prev, ...valid.map((t) => ({ ...t, id: crypto.randomUUID() }))]);
+      const fileScale = (parsed as { scale?: number }).scale ?? 1;
+      const converted = fileScale < SCALE_VERSION ? valid.map(rescaleTemplate) : valid;
+      setTemplates((prev) => [...prev, ...converted.map((t) => ({ ...t, id: crypto.randomUUID() }))]);
       setNotice(`Imported ${valid.length} samples.`);
     } catch {
       setNotice("That file doesn't contain templates from this tool.");
@@ -403,7 +407,7 @@ export default function IslTestApp() {
               className="btn"
               disabled={!templates.length}
               onClick={() =>
-                downloadFile("ishaara-templates.json", JSON.stringify({ dominant, templates }, null, 2), "application/json")
+                downloadFile("ishaara-templates.json", JSON.stringify({ dominant, scale: SCALE_VERSION, templates }, null, 2), "application/json")
               }
             >
               Export

@@ -1,4 +1,4 @@
-import { shapeDistance, type HandSide, type Pt, type Template } from "../isl/pose";
+import { rescaleTemplate, shapeDistance, SCALE_VERSION, type HandSide, type Pt, type Template } from "../isl/pose";
 import type { Credit, RefSet } from "./store";
 
 export const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -49,7 +49,14 @@ export function parseRefSet(raw: unknown): RefSet | null {
     credit: typeof obj?.credit?.text === "string" ? obj.credit : undefined,
     templates,
     videos: obj?.videos && typeof obj.videos === "object" ? obj.videos : undefined,
+    scale: typeof obj?.scale === "number" ? obj.scale : undefined,
   };
+}
+
+/** Bring a set saved under an older normalisation up to date (idempotent). */
+export function ensureScale(set: RefSet): RefSet {
+  if ((set.scale ?? 1) >= SCALE_VERSION) return set;
+  return { ...set, scale: SCALE_VERSION, templates: set.templates.map(rescaleTemplate) };
 }
 
 /** Store every set right-handed so sets recorded by different signers combine. */
@@ -81,8 +88,8 @@ export interface References {
 
 /** Local recordings replace bundled ones letter by letter. */
 export function buildReferences(bundled: RefSet | null, local: RefSet | null, learner: HandSide): References {
-  const b = bundled ? toRightHanded(bundled) : null;
-  const l = local ? toRightHanded(local) : null;
+  const b = bundled ? toRightHanded(ensureScale(bundled)) : null;
+  const l = local ? toRightHanded(ensureScale(local)) : null;
   const localLetters = new Set(l?.templates.map((t) => t.letter) ?? []);
   const merged = [...(b?.templates.filter((t) => !localLetters.has(t.letter)) ?? []), ...(l?.templates ?? [])];
   const templates = learner === "Right" ? merged : merged.map(mirrorTemplate);

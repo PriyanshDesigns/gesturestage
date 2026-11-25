@@ -1,4 +1,4 @@
-import { orderHands, type HandSide, type Pt, type Template, type TrackedHand } from "../isl/pose";
+import { handScale, orderHands, type HandSide, type Pt, type Template, type TrackedHand } from "../isl/pose";
 
 export const CONNECTIONS: [number, number][] = [
   [0, 1], [1, 2], [2, 3], [3, 4],
@@ -28,7 +28,6 @@ export function readPalette(el: Element | null): HandPalette {
 }
 
 const WRIST = 0;
-const MIDDLE_MCP = 9;
 
 function strokeHand(ctx: CanvasRenderingContext2D, pts: { x: number; y: number }[], color: string, width: number) {
   ctx.strokeStyle = color;
@@ -80,7 +79,7 @@ export function drawStage(
       const a = anchorHand.landmarks;
       ox = a[WRIST].x * aspect;
       oy = a[WRIST].y;
-      scale = Math.hypot((a[MIDDLE_MCP].x - a[WRIST].x) * aspect, a[MIDDLE_MCP].y - a[WRIST].y);
+      scale = handScale(a.map((p) => ({ x: p.x * aspect, y: p.y, z: 0 })));
     } else {
       // No hand yet: show the shape where a hand would comfortably sit.
       ox = (dominant === "Right" ? 0.4 : 0.6) * aspect;

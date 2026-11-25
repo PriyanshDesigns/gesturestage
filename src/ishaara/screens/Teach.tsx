@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
-import { toPose, type HandSide, type Template, type TrackedHand } from "../../isl/pose";
+import { toPose, SCALE_VERSION, type HandSide, type Template, type TrackedHand } from "../../isl/pose";
 import { downloadFile } from "../../isl/storage";
 import { useTwoHandTracking } from "../../isl/useTwoHandTracking";
 import { ReferenceCard } from "../components/Coach";
 import { drawStage, readPalette, type HandPalette } from "../draw";
-import { ALPHABET, parseRefSet, type References } from "../references";
+import { ALPHABET, ensureScale, parseRefSet, type References } from "../references";
 import { loadTestPageTemplates, type RefSet } from "../store";
 
 const COUNTDOWN_MS = 3000;
@@ -54,7 +54,7 @@ export function Teach({ refs, bundledCount, local, learnerDominant, onChange }: 
   const testSet = loadTestPageTemplates();
 
   function save(templates: Template[], hand = signerHand, name = signer) {
-    onChange(templates.length ? { version: 1, dominant: hand, signer: name.trim() || undefined, templates, videos: local?.videos } : null);
+    onChange(templates.length ? { version: 1, scale: SCALE_VERSION, dominant: hand, signer: name.trim() || undefined, templates, videos: local?.videos } : null);
   }
 
   function handleFrame(hands: TrackedHand[], frameAspect: number, now: number) {
@@ -92,7 +92,7 @@ export function Teach({ refs, bundledCount, local, learnerDominant, onChange }: 
     const kept = (s.local?.templates ?? []).filter((t) => t.letter !== rec.letter);
     if (rec.captured.length) {
       const templates = [...kept, ...rec.captured];
-      s.onChange({ version: 1, dominant: s.signerHand, signer: s.signer.trim() || undefined, templates, videos: s.local?.videos });
+      s.onChange({ version: 1, scale: SCALE_VERSION, dominant: s.signerHand, signer: s.signer.trim() || undefined, templates, videos: s.local?.videos });
     }
     setNotice(
       done
@@ -131,7 +131,8 @@ export function Teach({ refs, bundledCount, local, learnerDominant, onChange }: 
     }
   }
 
-  function adopt(set: RefSet) {
+  function adopt(incoming: RefSet) {
+    const set = ensureScale(incoming);
     if (localTemplates.length && set.dominant !== signerHand) {
       setNotice(`That set was recorded ${set.dominant.toLowerCase()}-handed; clear your recordings first to switch.`);
       return;

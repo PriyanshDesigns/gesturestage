@@ -1,4 +1,4 @@
-import type { HandSide, RunStats, Template } from "./pose";
+import { rescaleTemplate, SCALE_VERSION, type HandSide, type RunStats, type Template } from "./pose";
 
 export type Contact = "apart" | "touching" | "overlapping";
 
@@ -15,6 +15,7 @@ export interface SavedState {
   dominant: HandSide;
   templates: Template[];
   results: RunResult[];
+  scale?: number;
 }
 
 const KEY = "ishaara-two-hand-test-v1";
@@ -22,7 +23,10 @@ const KEY = "ishaara-two-hand-test-v1";
 export function loadState(): SavedState | null {
   try {
     const raw = localStorage.getItem(KEY);
-    return raw ? (JSON.parse(raw) as SavedState) : null;
+    if (!raw) return null;
+    const state = JSON.parse(raw) as SavedState;
+    if ((state.scale ?? 1) < SCALE_VERSION) return { ...state, scale: SCALE_VERSION, templates: state.templates.map(rescaleTemplate) };
+    return state;
   } catch {
     return null;
   }
@@ -30,7 +34,7 @@ export function loadState(): SavedState | null {
 
 export function saveState(state: SavedState) {
   try {
-    localStorage.setItem(KEY, JSON.stringify(state));
+    localStorage.setItem(KEY, JSON.stringify({ ...state, scale: SCALE_VERSION }));
   } catch {
     // Storage blocked (e.g. private mode): the session still works in memory.
   }

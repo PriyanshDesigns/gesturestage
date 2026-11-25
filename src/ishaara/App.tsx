@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { randomWord } from "./letters";
 import type { Strictness } from "./useCoach";
-import { buildReferences, fetchBundledRefs } from "./references";
+import { buildReferences, ensureScale, fetchBundledRefs } from "./references";
 import { go, useRoute, type Route } from "./router";
 import { DEFAULT_STATE, loadState, recordAttempt, saveState, type AppState, type Attempt, type RefSet } from "./store";
 import { Home } from "./screens/Home";
@@ -21,7 +21,10 @@ const NAV: { route: Route["name"]; label: string }[] = [
 ];
 
 export default function App() {
-  const [state, setState] = useState<AppState>(loadState);
+  const [state, setState] = useState<AppState>(() => {
+    const saved = loadState();
+    return saved.localRefs ? { ...saved, localRefs: ensureScale(saved.localRefs) } : saved;
+  });
   const [bundled, setBundled] = useState<RefSet | null>(null);
   const [loading, setLoading] = useState(true);
   const [firstWord, setFirstWord] = useState(() => randomWord());

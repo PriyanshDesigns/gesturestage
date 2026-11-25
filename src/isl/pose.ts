@@ -70,6 +70,37 @@ export function orderHands(hands: TrackedHand[], dominant: HandSide): TrackedHan
 }
 
 /**
+ * Typical palm proportions, relative to wrist→middle knuckle, measured over
+ * the shipped references where the palm faces the camera.
+ */
+const PALM_RATIOS: [number, number, number][] = [
+  [WRIST, MIDDLE_MCP, 1],
+  [WRIST, 5, 1.056], // index knuckle
+  [WRIST, 17, 0.83], // little knuckle
+  [5, 17, 0.546], // palm width
+];
+
+/** Bumped when the normalisation changes, so stored templates can be converted. */
+export const SCALE_VERSION = 2;
+
+/**
+ * Hand size from the palm. A single segment shrinks when the hand turns
+ * (a fist side-on makes wrist→middle look tiny and blows the shape up), so
+ * take the largest of several segments, each divided by its usual ratio.
+ */
+export function handScale(points: Pt[]): number {
+  let best = 0;
+  for (const [a, b, ratio] of PALM_RATIOS) best = Math.max(best, Math.hypot(points[b].x - points[a].x, points[b].y - points[a].y) / ratio);
+  return best;
+}
+
+/** Convert a template saved before SCALE_VERSION 2 (sized by wrist→middle only). */
+export function rescaleTemplate<T extends { points: Pt[] }>(t: T): T {
+  const k = handScale(t.points) || 1;
+  return { ...t, points: t.points.map((p) => ({ x: p.x / k, y: p.y / k, z: p.z / k })) };
+}
+
+/**
  * Express both hands relative to the dominant hand's wrist and size, so the
  * same letter matches regardless of where the signer stands or how far away.
  * `aspect` (video width / height) makes x and y the same unit.
@@ -80,8 +111,7 @@ export function toPose(hands: TrackedHand[], dominant: HandSide, aspect: number)
   const anchor = ordered[0].landmarks;
   const ox = anchor[WRIST].x * aspect;
   const oy = anchor[WRIST].y;
-  const scale =
-    Math.hypot((anchor[MIDDLE_MCP].x - anchor[WRIST].x) * aspect, anchor[MIDDLE_MCP].y - anchor[WRIST].y) || 1e-4;
+  const scale = handScale(anchor.map((p) => ({ x: p.x * aspect, y: p.y, z: 0 }))) || 1e-4;
 
   const points: Pt[] = [];
   for (const hand of ordered) {
